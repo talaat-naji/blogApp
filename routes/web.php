@@ -26,11 +26,11 @@ Route::get('/', function () {
 
 
 Route::middleware(['auth:sanctum', 'verified'])
-// ->get('/dashboard', [PostsController::class,'showPosts'])
-// ->name('feeds');
-->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+->get('/dashboard', [PostsController::class,'showPosts'])
+->name('dashboard');
+// ->get('/dashboard', function () {
+//     return view('dashboard');
+// })->name('dashboard');
 
 
 Route::middleware(['auth:sanctum', 'verified'])

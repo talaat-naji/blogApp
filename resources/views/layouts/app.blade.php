@@ -30,7 +30,7 @@
             </header> --}}
 
             <!-- Page Content -->
-            <main class='body'>
+            <main class='bg-gray-100 '>
                 {{ $slot }}
             </main>
         </div>

@@ -58,9 +58,10 @@
                     <hr>
                 </div>
             </form>
+              <div class="justify-content-center">
             @foreach ($posts as $post)
 
-                <div class="mx-auto">
+                <div class="mx-auto justify-content-center">
                     <div class="row">
                         <div class='col-sm'>
 
@@ -89,13 +90,13 @@
                   
                         <div class='col-md-auto'>
                             
-                                <button onclick=likkee({{ $post->id }}) id='{{ $post->id }}' class="btn btn-secondary likebtn" name="likebtn">{{ $post->likenb }} Likes</button>
+                                <button onclick=likkee({{ $post->id }}) id='{{ $post->id }}' class="btn like likebtn" name="likebtn">{{ $post->likenb }} Likes</button>
 
                             
                         </div>
 
                         <div class='col-md-auto' id='dform{{ $post->id }}'>
-                     <button class="btn btn-secondary cmnt" onclick=comment({{ $post->id }})  id='c{{ $post->id }}'>{{-- $post->cmntnb --}} comments</button>
+                     <button class="btn like cmnt" onclick=comment({{ $post->id }})  id='c{{ $post->id }}'>{{-- $post->cmntnb --}} comments</button>
                            
                         </div>
                     </div>
@@ -104,6 +105,7 @@
 
 
             @endforeach
+            </div>
              <form method='post' action="{{ url('feeds') }}">
                                 @csrf
                                 <input type='hidden' value="5" name='seeMore' />
