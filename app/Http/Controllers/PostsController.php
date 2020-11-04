@@ -12,9 +12,21 @@ use Illuminate\Support\Facades\Response;
 
 class PostsController extends Controller
 {
-    public function showPosts(){
+    public function showPosts(Request $request){
+   $n=5;
+     $inc=$request->seeMore;
+      if($inc>0){
+        $n+=10;
+      }else{$n=5;}
 
-       $posts= DB::table('posts')->join('users','posts.user_id','=','users.id')->select('posts.*','users.id as uid','users.name')->latest()->get();
+       $posts= DB::table('posts')
+       ->leftJoin('users','posts.user_id','=','users.id')
+       ->leftJoin('likes','likes.post_id','=','posts.id')
+      //  ->leftJoin('comments','comments.post_id','=','posts.id')
+       ->select('posts.*','users.id as uid','users.name', 
+                DB::raw("count(likes.post_id) as likenb"))
+       ->groupBy('posts.id')
+       ->latest()->paginate($n);
      //return $posts;
      return view('feed',compact('posts'));
     }
@@ -33,14 +45,18 @@ class PostsController extends Controller
           'blog_text' =>'required',
          // 'pic_path' => 'required|image'
       ]);
-      $image_file=$request->pic_path;
+      if($request->file('imgg')!=null){
+      $file_namewithExt= $request->file('imgg')->getClientOriginalName();
+// $filename=pathinfo($file_namewithExt);
+// $extention=$request->file('imgg')->getClientOriginalExtension();
 
-    //   $image=Image::make($image_file);
-    //   Response::make($image->encode('jpeg'));
+// $filenametostore=$filename."_".time()."_".$extention;
+$path=$request->file('imgg')->storeAs('/storage', $file_namewithExt);
+      }else{$path='';}
       $form_data=array(
           'user_id'=>Auth::id(),
           'blog_text'=>$request->blog_text,
-          'pic_path'=>'pics/postPics/bg2.jpg'
+          'pic_path'=>$path
       );
       posts::create($form_data);
      return redirect('/feeds');

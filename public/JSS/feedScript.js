@@ -5,74 +5,126 @@ class services{
        return response.json();
    }
     
-   async likePosts(postId) {
+    async like(postId) {
     let jsonBody = JSON.stringify({'postId':postId});
-       
+      
        // let response = 
-        await fetch('/del', {
+        await fetch('/likejs', {
             method: 'POST',
             body: jsonBody,
             headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                 'Content-Type': 'application/json'
             }
         });
-  }
+    }
+    async likecounts(postId) {
+        let jsonBody = JSON.stringify({'postId':postId});
+          
+     let response = await fetch('/likecount', {
+                method: 'POST',
+                body: jsonBody,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+     });
+       // console.log();
+        return response.json();
+    }
+    
+    async cmntscounts(postId) {
+        let jsonBody = JSON.stringify({'postId':postId});
+          
+     let response = await fetch('/countCommentjs', {
+                method: 'POST',
+                body: jsonBody,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+     });
+       // console.log();
+        return response.json();
+    }
+
+    async comment(postId,text) {
+        let jsonBody = JSON.stringify({'postId':postId,'text':text});
+          
+           // let response = 
+            await fetch('/commentjs', {
+                method: 'POST',
+                body: jsonBody,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            });
+    }
+    async cmntContent(postId) {
+        let jsonBody = JSON.stringify({'postId':postId});
+          
+            let response =  await fetch('/cmntContent', {
+                method: 'POST',
+                body: jsonBody,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            });
+        return response.json();
+    }
 }
 service = new services();
-root = document.getElementsByClassName('acts');
-let n = 0;
-while(n<root.length){
-    like = document.createElement('button');
-    like.className = "btn btn";
-like.innerText = "Like";
-         
-like.addEventListener('click', (event) => {
-    console.log('like clicked for post', n);
-            });
-    root[n].append(like);
-    comment = document.createElement('button');
-    comment.className = "btn btn";
-    comment.innerText = "comment";
-             
-    comment.addEventListener('click', (event) => {
-                    service.commentPost();
-                });
-        root[n].append(comment);
-    n++;
-}
+async function likkee(postId){
 
+    root = document.getElementById(postId);
 
-
-
-
-
-// root = document.getElementById('acts');
-
-// async function showPostv() {
-//    let res = await service.getPosts();
-//     console.log(res);
-//     res.forEach((element) => {
-//         blog_text = document.createElement('p');
-// blog_img = document.createElement('img');
-// blog_img.alt = "here image will be display";
-// blog_img.setAttribute('width','600px');
-//         blog_img.setAttribute('height', '500px');
         
-//         blog_text.innerText = element.blog_text;
-//         blog_img.src = element.pic_path;
+            await service.like(postId);
+            
+            let count = await service.likecounts(postId);
+            root.innerHTML = count + " Likes";
+}
+    
+async function comment(postId) {
+    com=await service.cmntContent(postId);
+    div = document.getElementById("dform" + postId);
+    cmnt = document.getElementById("c" + postId);
+    div.innerHTML = '';
+    div.append(cmnt);
+    let count = await service.cmntscounts(postId);
+    cmnt.innerText = count + " comments";
+    let inp = document.createElement('input');
+    let sub = document.createElement('button');
+    sub.innerText = "send comment";
+    inp.name = "comment_text";
+    inp.type = "text";
+    inp.placeholder = "write a comment !";
+    
+    sub.addEventListener('click', async(event) => {
+        let text = inp.value; 
+       await service.comment(postId, text);
+       
+        comment(postId);
+    });
+    div.append(inp,sub);
+    com.forEach((cmnt) => {
+        let divv = document.createElement('div');
+        divv.className = "userName";
+        divv.innerText = cmnt.name;
+        let divv2 = document.createElement('div');
+        divv2.className = "Comment";
+        divv2.innerText = cmnt.cmnt_text;
+        div.append(divv,divv2);
+});
+    root = document.getElementById(postId);
 
-//         like = document.createElement('button');
-//         like.innerText = "Like";
-//         comment = document.createElement('button');
-//         comment.innerText = "comment";
 
-//         like.addEventListener('click', (event) => {
-//             service.likePost();
-//         });
-//         del.addEventListener('click', (event) => {
-//             service.delPost();
-//         })
-//         root.append(blog_text, blog_img, like, comment);
-//     });
-// }
-// showPostv();
+
+        
+            // await service.like(postId);
+            
+            // let count = await service.likecounts(postId);
+            // root.innerHTML = count + " Likes";
+    }

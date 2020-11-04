@@ -1,7 +1,13 @@
-<!Doctype>
-<html>
+<x-app-layout>
+    {{-- <x-slot name="header">
+       
+    </x-slot> --}}
+
+{{-- <!Doctype>
+<html> --}}
 
 <head>
+<meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('/css/feed.css') }}" />
@@ -10,10 +16,22 @@
     </title>
 </head>
 
-<body class="body">
-    <div class='container cntb'>
+{{-- <body class="body"> --}}
 
-        <h2>Add New Post !!</h2>
+{{-- 
+
+@extends('components.master')
+@include('components.nav')
+@include('components.upload_form')
+
+@component('components.success')
+
+@endcomponent --}}
+{{--  ############################################################ --}}
+<br>
+    <div class='container bg-gray-100'>
+<br>
+        {{-- <h2>Add New Post !!</h2> --}}
         @if ($errors->any())
             <div class='alert alert-danger'>
                 <ul>
@@ -24,7 +42,7 @@
             </div>
         @endif
         <div class="align-items-center">
-            <form method='post' action="{{ url('feeds') }}">
+            <form method='post' enctype='multipart/form-data' action="{{ url('feeds/addPosts') }}">
                 @csrf
                 <div class="form-group">
                     <input class="form-control" type='textArea' name='blog_text'
@@ -61,24 +79,24 @@
                     </div>
 
                     <p>{{ $post->blog_text }}</p>
+                    
+                    @if($post->pic_path !='')
+                    
                     <img src="{{ $post->pic_path }}" alt="post image goes here" width='500px' height='300px' />
-                    <div class="acts"> </div>
+                    
+                   @endif
                     <div class="row justify-content-md-left">
+                  
                         <div class='col-md-auto'>
-                            <form method='post' action="{{ url('/like') }}">
-                                @csrf
-                                <input type='hidden' value="{{ $post->id }}" name='pstId' />
-                                <button class="btn btn-secondary" name="like" id='lik'>Like</button>
+                            
+                                <button onclick=likkee({{ $post->id }}) id='{{ $post->id }}' class="btn btn-secondary likebtn" name="likebtn">{{ $post->likenb }} Likes</button>
 
-                            </form>
+                            
                         </div>
 
-                        <div class='col-md-auto'>
-                            <form method='post' action="{{ url('feeds/cmnt') }}">
-                                @csrf
-                                <input type='hidden' value="{{ $post->id }}" name='pstId' />
-                                <button class="btn btn-secondary" name="comment" id='cmnt'>comment</button>
-                            </form>
+                        <div class='col-md-auto' id='dform{{ $post->id }}'>
+                     <button class="btn btn-secondary cmnt" onclick=comment({{ $post->id }})  id='c{{ $post->id }}'>{{-- $post->cmntnb --}} comments</button>
+                           
                         </div>
                     </div>
                     <hr>
@@ -86,10 +104,17 @@
 
 
             @endforeach
-            {{-- <script src="/JSS/feedScript.js"></script>
-            --}}
+             <form method='post' action="{{ url('feeds') }}">
+                                @csrf
+                                <input type='hidden' value="5" name='seeMore' />
+                                <button class="btn btn-link" name="comment" id='cmnt'>See More</button>
+                            </form>
+                            
+            <script src="JSS/feedScript.js"></script>
+            
         </div>
     </div>
-</body>
+{{-- </body>
 
-</html>
+</html> --}}
+</x-app-layout> 

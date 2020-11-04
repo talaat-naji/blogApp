@@ -1,2 +1,4 @@
 .body{background-color: blueviolet;}
 .cntb{background-color:cornsilk}
+.userName{font-weight: bold; font-family: 'Times New Roman';background-color: rgb(246, 248, 107);}
+.Comment{font-family:'Cambria';background-color: rgb(246, 248, 139); text-align: center;}
