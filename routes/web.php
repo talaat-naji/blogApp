@@ -17,59 +17,23 @@ use App\Http\Controllers\CommentsController;
 */
 Route::get('/linkstorage', function () { $targetFolder = base_path().'/storage';
     $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage'; symlink($targetFolder, $linkFolder); });
-    Route::get('/linkcss', function () { $targetFolder = base_path().'/resources/css';
-        $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/css'; symlink($targetFolder, $linkFolder); }); 
+   
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::get('/',[PostsController::class,'publicshowPosts']);
+
+Route::middleware(['auth:sanctum', 'verified'])
+->group(function(){
+    Route::get('/dashboard',[PostsController::class,'showPosts'])->name('dashboard');
+    Route::post('/feeds', [PostsController::class,'showPosts'])->name('seemore');
+    Route::get('/feeds', [PostsController::class,'showPosts'])->name('feeds');
+    Route::post('/feeds/addPosts', [PostsController::class,'addPosts'])->name('addPost');
+    Route::post('/del', [PostsController::class,'delPosts'])->name('delPost');
+    Route::post('/likejs', [LikesController::class,'likePostjs']);
+    Route::post('/likecount', [LikesController::class,'likeCount'])->name('likeCount');
+    Route::post('/editText', [PostsController::class,'editText']);
+    Route::post('/delCmnt', [CommentsController::class,'delCmnt']);
+    Route::post('/cmntContent', [CommentsController::class,'cmntContent']);
+    Route::post('/commentjs', [CommentsController::class,'cmntPosts']);
+    Route::post('/countCommentjs', [CommentsController::class,'cmntCount']);
 });
-
-
-Route::middleware(['auth:sanctum', 'verified'])
-->get('/dashboard', [PostsController::class,'showPosts'])
-->name('dashboard');
-// ->get('/dashboard', function () {
-//     return view('dashboard');
-// })->name('dashboard');
-
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/likejs', [LikesController::class,'likePostjs']);
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/like', [LikesController::class,'likePost'])->name('like');
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/likecount', [LikesController::class,'likeCount'])->name('likeCount');
-
-Route::middleware(['auth:sanctum', 'verified'])
-->get('/feeds', [PostsController::class,'showPosts'])
-->name('feeds');
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/feeds/addPosts', [PostsController::class,'addPosts'])
-->name('addPost');
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/feeds', [PostsController::class,'showPosts'])
-->name('showPost');
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/del', [PostsController::class,'delPosts'])
-->name('delPost');
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/commentjs', [CommentsController::class,'cmntPosts']);
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/countCommentjs', [CommentsController::class,'cmntCount']);
-
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/cmntContent', [CommentsController::class,'cmntContent']);
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/delCmnt', [CommentsController::class,'delCmnt']);
-
-Route::middleware(['auth:sanctum', 'verified'])
-->post('/editText', [PostsController::class,'editText']);

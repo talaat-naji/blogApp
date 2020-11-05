@@ -12,8 +12,24 @@ use Illuminate\Support\Facades\Response;
 
 class PostsController extends Controller
 {
-    public function showPosts(Request $request){
-   $n=5;
+
+  public function publicshowPosts(){
+   
+ 
+        $posts= DB::table('posts')
+        ->leftJoin('users','posts.user_id','=','users.id')
+        ->leftJoin('likes','likes.post_id','=','posts.id')
+     
+        ->select('posts.*','users.id as uid','users.name', 
+                 DB::raw("count(likes.post_id) as likenb"))
+        ->groupBy('posts.id')
+        ->latest()->paginate(5);
+    
+      return view('welcome',compact('posts'));
+     }
+
+  public function showPosts(Request $request){
+     $n=5;
      $inc=$request->seeMore;
       if($inc>0){
         $n+=10;
@@ -22,16 +38,15 @@ class PostsController extends Controller
        $posts= DB::table('posts')
        ->leftJoin('users','posts.user_id','=','users.id')
        ->leftJoin('likes','likes.post_id','=','posts.id')
-      //  ->leftJoin('comments','comments.post_id','=','posts.id')
        ->select('posts.*','users.id as uid','users.name', 
                 DB::raw("count(likes.post_id) as likenb"))
        ->groupBy('posts.id')
        ->latest()->paginate($n);
-     //return $posts;
+    
      return view('feed',compact('posts'));
     }
 
-    public function delPosts(Request $request){
+  public function delPosts(Request $request){
         
         $postdel=$request->pstId;
        
@@ -39,16 +54,16 @@ class PostsController extends Controller
        return redirect('/feeds');
      }
    
-    public function addPosts(Request $request){
+  public function addPosts(Request $request){
 
       $request->validate([
           'blog_text' =>'required',
-         // 'pic_path' => 'required|image'
+          'pic_path' => 'nullable|image'
       ]);
       if($request->file('imgg')!=null){
       $file_namewithExt= $request->file('imgg')->getClientOriginalName();
 
-  $path=$request->file('imgg')->storeAs('/storage', $file_namewithExt);
+   $path=$request->file('imgg')->storeAs('/storage', $file_namewithExt);
       }else{$path='';}
       $form_data=array(
           'user_id'=>Auth::id(),
@@ -59,7 +74,7 @@ class PostsController extends Controller
      return redirect('/feeds');
      }
 
-     public function editText(Request $request){
+  public function editText(Request $request){
 
           $user_id=Auth::id();
           $new_text=$request->new_text;
