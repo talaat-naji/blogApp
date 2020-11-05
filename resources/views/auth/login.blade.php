@@ -1,6 +1,11 @@
 <x-guest-layout>
     <x-jet-authentication-card>
+    <x-slot name='title'>
+    <h1><b>FriendsHub</b></h1>
+        </x-slot>
+        
         <x-slot name="logo">
+        
             <x-jet-authentication-card-logo />
         </x-slot>
 

@@ -15,7 +15,7 @@ use App\Http\Controllers\CommentsController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/linkstorage', function () { $targetFolder = base_path().'/storage/app/publicc/postImage';
+Route::get('/linkstorage', function () { $targetFolder = base_path().'/storage';
     $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/storage'; symlink($targetFolder, $linkFolder); });
     Route::get('/linkcss', function () { $targetFolder = base_path().'/resources/css';
         $linkFolder = $_SERVER['DOCUMENT_ROOT'].'/css'; symlink($targetFolder, $linkFolder); }); 
@@ -67,3 +67,9 @@ Route::middleware(['auth:sanctum', 'verified'])
 
 Route::middleware(['auth:sanctum', 'verified'])
 ->post('/cmntContent', [CommentsController::class,'cmntContent']);
+
+Route::middleware(['auth:sanctum', 'verified'])
+->post('/delCmnt', [CommentsController::class,'delCmnt']);
+
+Route::middleware(['auth:sanctum', 'verified'])
+->post('/editText', [PostsController::class,'editText']);

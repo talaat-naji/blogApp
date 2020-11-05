@@ -47,11 +47,8 @@ class PostsController extends Controller
       ]);
       if($request->file('imgg')!=null){
       $file_namewithExt= $request->file('imgg')->getClientOriginalName();
-// $filename=pathinfo($file_namewithExt);
-// $extention=$request->file('imgg')->getClientOriginalExtension();
 
-// $filenametostore=$filename."_".time()."_".$extention;
-$path=$request->file('imgg')->storeAs('/storage', $file_namewithExt);
+  $path=$request->file('imgg')->storeAs('/storage', $file_namewithExt);
       }else{$path='';}
       $form_data=array(
           'user_id'=>Auth::id(),
@@ -60,6 +57,18 @@ $path=$request->file('imgg')->storeAs('/storage', $file_namewithExt);
       );
       posts::create($form_data);
      return redirect('/feeds');
+     }
+
+     public function editText(Request $request){
+
+          $user_id=Auth::id();
+          $new_text=$request->new_text;
+          $post_id=$request->post_id;
+       
+      
+      posts::where('posts.id',$post_id)
+      ->where('posts.user_id',$user_id)
+      ->update(['blog_text'=>$new_text]);
      }
 
 }

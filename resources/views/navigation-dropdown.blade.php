@@ -4,11 +4,11 @@
         <div class="flex justify-between h-16">
             <div class="flex">
                 <!-- Logo -->
-                {{-- <div class="flex-shrink-0 flex items-center">
+                <div class="flex-shrink-0 flex items-center">
                      <a href="{{ route('dashboard') }}"> 
                         <x-jet-application-mark class="block h-9 w-auto" />
                     </a>
-                </div> --}}
+                </div>
   <div class="flex-shrink-2 flex items-center">
   <h3 class="flex items-center">FriendsHub</h3>
   </div>

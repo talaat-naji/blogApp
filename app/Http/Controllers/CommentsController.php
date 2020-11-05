@@ -41,4 +41,12 @@ class CommentsController extends Controller
    
    return $content;
    }
+
+
+   function delCmnt(Request $request){
+
+      $id=$request->id;
+     comments::destroy($id);
+ 
+     }
 }
