@@ -27,12 +27,15 @@
                 </ul>
             </div>
         @endif --}}
-        <div class="align-items-center">
-            <form method='post' enctype='multipart/form-data' action="{{ url('feeds/addPosts') }}">
+         <div class="bg-gray-100 justify-content-center">
+         <div class="border bg-white wid1 justify-content-center">
+        {{-- <div class="align-items-center"> --}}
+            <form method='post' class='' enctype='multipart/form-data' action="{{ url('feeds/addPosts') }}">
                 @csrf
                 <div class="form-group">
-                    <input class="form-control" type='textArea' name='blog_text'
-                        placeholder="What's on your mind?" /><br>
+                    {{-- <input class="form-control textareaa" type='textArea' name='blog_text'
+                        placeholder="What's on your mind?" /><br> --}}
+                        <textarea placeholder="What's on your mind?" class="form-control textareaa" name='blog_text'></textarea>
                     <div class="row">
                         <div class='col-sm'>
                             <input class="form-control-file " type='file' name='imgg' />
@@ -41,17 +44,18 @@
                             <input class="btn btn-primary" type='submit' name='sub' value="Post" />
                         </div>
                     </div>
-                    <hr>
+                   
                 </div>
             </form>
-            <div class="bg-gray-100 justify-content-center">
+          </div><br>
                 @foreach ($posts as $post)
 
                     <div class="border bg-white wid justify-content-center">
                         <div class="row">
                             <div class='col-sm'>
 
-                                <h4><b>{{ $post->name }}</b></h4>
+                               <div> <b class='userName1'>{{ $post->name }}</b><br>
+                                <small class='date'>{{ $post->created_at }}</small></div>
                             </div>
 
                             <div class='col-sm'>
@@ -61,13 +65,13 @@
                                         <button class="dropbtn"><i class="fa fa-bars"></i></button>
 
                                         <div class="dropdown-content">
-                                            <form method='post' action="{{ url('del') }}">
+                                            <form id='{{ $post->id }}del' method='post' action="{{ url('del') }}">
                                                 @csrf
                                                 <input type='hidden' value="{{ $post->id }}" name='pstId' />
-                                                <button class="btn navbar" name="del" id='lik'>delete post</button>
-
+                                                <input type='hidden' value="{{ $post->pic_path }}" name='pic' />
 
                                             </form>
+<button onclick=confirmm({{ $post->id }}) class="btn navbar" name="del" /> delete post</button>
 
                                             <button class="btn navbar" name="del" onclick=edit({{ $post->id }})>edit
                                                 post</button>
@@ -82,7 +86,7 @@
 
                         @if ($post->pic_path != '')
 
-                            <img src="storage/app/{{ $post->pic_path }}" alt="post image goes here" width='500px'
+                            <img class="imgg" src="storage/app/{{ $post->pic_path }}" alt="post image goes here" width='700px'
                                 height='300px' />
 
                         @endif
@@ -114,12 +118,13 @@
 
 
                 @endforeach
+                {{ $posts->links() }}
             </div>
-            <form method='post' action="{{ url('feeds') }}">
+            {{-- <form method='post' action="{{ url('feeds') }}">
                 @csrf
                 <input type='hidden' value="5" name='seeMore' />
                 <button class="btn btn-link" name="comment" id='cmnt'>See More</button>
-            </form>
+            </form> --}}
 
             <script src="JSS/feedScript.js"></script>
 

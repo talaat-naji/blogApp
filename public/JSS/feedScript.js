@@ -229,3 +229,11 @@ async function edit(postId) {
 function login() {
     alert("Login to benifit from our services :)");
 }
+function confirmm(postId) {
+    let btn = postId + "del";
+    let att = document.getElementById(btn);
+    let r = confirm("are you sure you want to delete this post?");
+    if (r) {
+        att.submit();
+    }
+}

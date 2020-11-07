@@ -5,10 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\posts;
 use App\Models\users;
 use Illuminate\Http\Request;
-use Intervention\Image\Image;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -38,19 +37,27 @@ class PostsController extends Controller
        $posts= DB::table('posts')
        ->leftJoin('users','posts.user_id','=','users.id')
        ->leftJoin('likes','likes.post_id','=','posts.id')
-       ->select('posts.*','users.id as uid','users.name', 
-                DB::raw("count(likes.post_id) as likenb"))
-       ->groupBy('posts.id')
-       ->latest()->paginate($n);
+       ->select('posts.*','users.id as uid','users.name' 
+                ,DB::raw("count(likes.post_id) as likenb")
+                )
+       ->groupBy('likes.post_id','posts.id')
+       ->latest()->simplePaginate(2);
     
      return view('feed',compact('posts'));
     }
 
   public function delPosts(Request $request){
-        
+    $imagepath='var/www/bloggApp/storage/app/'.$request->pic;
+    if($imagepath!="var/www/bloggApp/storage/app/"){
+     
+    if(Storage::exists($imagepath)){
+      
+      Storage::delete($imagepath);
+    }
+  }
         $postdel=$request->pstId;
        
-        posts::destroy($postdel);
+       posts::destroy($postdel);
        return redirect('/feeds');
      }
    
