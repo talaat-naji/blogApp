@@ -9,20 +9,30 @@
         <link rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>
-            PROFILE
+            news feed
         </title>
     </head>
 
 
     <br>
-  
+    
          <div class="bg-gray-100 justify-content-center">
          <div class="border bg-white wid1 justify-content-center">
-        
+            @if ($userId['us'] != Auth::id())
+                        <div class='justify-content-center'>
+                            <input  type='hidden' value={{ $userId['us'] }} id="{{ $userId['us'] }}toBeAdded"/>
+
+                                <button class='followBtn'  id="followbtn{{ $userId['us'] }}" class='' onclick="addFriend({{$userId['us'] }})">loadind...</button>
+                        
+                           </div>
+                            @endif  
+        {{-- <div class="align-items-center"> --}}
+        @if ($userId['us'] == Auth::id())
             <form method='post' class='' enctype='multipart/form-data' action="{{ url('feeds/addPosts') }}">
                 @csrf
                 <div class="form-group">
-                    
+                    {{-- <input class="form-control textareaa" type='textArea' name='blog_text'
+                        placeholder="What's on your mind?" /><br> --}}
                         <textarea placeholder="What's on your mind?" class="form-control textareaa" name='blog_text'></textarea>
                     <div class="row">
                         <div class='col-sm'>
@@ -34,7 +44,7 @@
                     </div>
                    
                 </div>
-            </form>
+            </form> @endif 
           </div><br>
                 @foreach ($posts as $post)
 
@@ -44,22 +54,11 @@
                         <img class="profile" src="https://ui-avatars.com/api/?name={{ $post->name }}"/>
                         </div>
                             <div class='col-sm'>
-                                <form action="/usProfile" method="POST">
-                                @csrf
-                                <input type='hidden' value={{ $post->uid }} name="profId"/>
-                               <div> <button ><b class='userName1'>{{ $post->name }}</b></button><br>
-                               </form>
-                                <h6 class='date'>{{ $post->created_at }}</h6></div>
-                                
-                            </div>
-                            {{-- @if ($post->uid != Auth::id())
-                        <div class='col-sm'>
-                            <input type='hidden' value={{ $post->uid }} id='{{ $post->uid }}toBeAdded'/>
 
-                                <button id='followbtn{{ $post->uid }}' class='' onclick=addFriend({{ $post->uid }})>Follow</button>
-                        
-                           </div>
-                              @endif   --}}
+                               <div> <b class='userName1'>{{ $post->name }}</b><br>
+                                <h6 class='date'>{{ $post->created_at }}</h6></div>
+                            </div>
+                           
                             <div class='col-sm'>
                                 @if ($post->uid == Auth::id())
                                     <div class="dropdown">
@@ -120,20 +119,12 @@
 
 
                 @endforeach
-                {{ $posts->links() }}
+                {{-- $posts->links() --}}
             </div>
-            {{-- <form method='post' action="{{ url('feeds') }}">
-                @csrf
-                <input type='hidden' value="5" name='seeMore' />
-                <button class="btn btn-link" name="comment" id='cmnt'>See More</button>
-            </form> --}}
-
-            <script src="JSS/feedScript.js"></script>
+          
+            <script src="JSS/feedScript.js" onload="getFollowStatus({{ $userId['us'] }})"></script>
 
         </div>
 
-        {{--
-        </body>
-
-        </html> --}}
+     
 </x-app-layout>

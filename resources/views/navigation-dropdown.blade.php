@@ -18,6 +18,21 @@
          <div class="notify">{{ auth()->user()->unreadNotifications->count() }}</div>
          @endif
          </div>
+          <div class="flex-shrink-2 flex items-center">
+         <b class='navbtn1'> <a href='/followingPosts'> Following </a></b>
+          </div>
+          <div class="flex-shrink-2 flex items-center">
+          
+          <b class='navbtn1'><a href='/feeds'> For You <i class='fa fa-home'></i></a></b>
+          </div>
+          <div class="flex-shrink-2 flex items-center">
+         {{-- <a href='/feeds'> My Posts </a> --}}
+           <form action="/usProfile" method="POST">
+               @csrf
+                  <input type='hidden' value={{ Auth()->id()}} name="profId"/>
+                  <div> <a><button ><b class='navbtn1'>My Posts</b></button></a></div>
+             </form>
+          </div>
                  <!-- Navigation Links -->
                 {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">

@@ -184,3 +184,14 @@
     padding: 0px;
     margin: 0px;
 }
+.navbtn1{padding-left: 40px;}
+
+.followBtn{
+    width:100%;
+   /* padding:10px; */
+    background-image: linear-gradient(rgb(7, 56, 181), rgb(80, 124, 237), rgb(7, 56, 181));
+    color:white;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 30px;
+}

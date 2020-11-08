@@ -13,6 +13,36 @@ use Illuminate\Support\Facades\Notification;
 class PostsController extends Controller
 {
 
+  public function followingPosts(Request $request){
+    
+    $posts= DB::table('posts')
+    ->leftJoin('users','posts.user_id','=','users.id')
+    ->leftJoin('likes','likes.post_id','=','posts.id')
+    ->leftjoin('friends', 'posts.user_id','=', 'friends.user_id_2')
+    ->where('friends.user_id_1','=',Auth::id()) 
+    ->select('posts.*','users.id as uid','users.name'
+             ,DB::raw("count(likes.post_id) as likenb")
+             )
+    ->groupBy('likes.post_id','posts.id')
+    ->latest()->simplePaginate(2);
+   
+  return view('followingPosts',compact('posts'));
+ }
+  public function showProfile(Request $request){
+    $posts= DB::table('posts')
+    ->where('posts.user_id','=',$request->profId)
+    ->leftJoin('users','posts.user_id','=','users.id')
+    ->leftJoin('likes','likes.post_id','=','posts.id')
+    ->select('posts.*','users.id as uid','users.name' 
+             ,DB::raw("count(likes.post_id) as likenb")
+             )
+    ->groupBy('likes.post_id','posts.id')
+    ->latest()->get();
+    $userId=['us'=>$request->profId];
+   // dd($posts);
+   return view('usProfile',compact('posts'),compact('userId'));
+ }
+  
   public function publicshowPosts(){
    
  

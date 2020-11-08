@@ -128,6 +128,36 @@ class services {
 
     }
 
+    async addFriends(uId) {
+        let jsonBody = JSON.stringify({ 'toBeAdded': uId });
+       
+      //  prompt(uId);
+      let response=  await fetch('/addFriend', {
+            method: 'POST',
+            body: jsonBody,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            }
+      });
+       // prompt(response);
+        return response.json();
+    }
+
+    async getFollowStat(uId) { 
+        let jsonBody = JSON.stringify({ 'toBeChecked': uId });
+        let response=  await fetch('/followStat', {
+            method: 'POST',
+            body: jsonBody,
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json'
+            }
+      });
+       // prompt(response);
+        return response.json();
+    }
+
 }
 service = new services();
 async function likkee(postId, notifId) {
@@ -316,3 +346,39 @@ async function test() {
 
 }
 test();
+
+async function addFriend(uId) { 
+    let approved = await service.addFriends(uId);
+  
+    let followbtn = document.getElementById('followbtn' + uId);
+    
+    if (approved == '') { followbtn.innerText = 'Follow'; }
+    else {
+        approved.forEach((approve) => {
+       
+            if (approve.approved == 1) {
+                followbtn.innerText = 'Following';
+            }
+          
+        });
+  
+    }
+}
+async function getFollowStatus(uId) {
+
+    let approved = await service.getFollowStat(uId);
+  
+    let followbtn = document.getElementById('followbtn' + uId);
+    
+    if (approved == '') { followbtn.innerText = 'Follow'; }
+    else {
+        approved.forEach((approve) => {
+       
+            if (approve.approved == 1) {
+                followbtn.innerText = 'Following';
+            }
+          
+        });
+  
+    }
+}

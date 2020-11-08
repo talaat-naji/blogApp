@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\FriendController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\NotificationController;
 
@@ -27,7 +28,10 @@ Route::middleware(['auth:sanctum', 'verified'])
 ->group(function(){
     Route::get('/dashboard',[PostsController::class,'showPosts'])->name('dashboard');
     Route::post('/post',[PostsController::class,'showPost'])->name('post');
-   // Route::get('/post',[PostsController::class,'showPost'])->name('getpost');
+    Route::post('/usProfile',[PostsController::class,'showProfile']);
+    Route::get('/followingPosts',[PostsController::class,'followingPosts']);
+    Route::post('/followStat',[FriendController::class,'followStat']);
+    Route::post('/addFriend',[FriendController::class,'index'])->name('addFriend');
     Route::post('/feeds', [PostsController::class,'showPosts'])->name('seemore');
     Route::get('/feeds', [PostsController::class,'showPosts'])->name('feeds');
     Route::post('/feeds/addPosts', [PostsController::class,'addPosts'])->name('addPost');
