@@ -1,12 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use App\Models\likes;
+use App\Notifications\likedYourPost;
 use Illuminate\Cache\NullStore;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Console\Output\NullOutput;
+use Illuminate\Notifications\Notification;
 
 class LikesController extends Controller
 {
@@ -31,14 +32,16 @@ if($check===0){
         $json = json_decode($jsonBody, true);
 
         $postlike= $json['postId'];
-       //dd($postlike);
+       $usName=Auth::user()->name;
         $usId=Auth::id();
+        $notif=$json['notifId'];
        $check= Likes::select('id')->where('user_id',$usId)->where('post_id',$postlike)->count();
     
 if($check===0){
         $data=['post_id'=>$postlike,
              'user_id'=>$usId];
-        likes::insert($data);
+        $liked_post=likes::insert($data);
+       user::find($notif)->notify(new likedYourPost($postlike,$usId,$usName));
     }else{
         likes::where('post_id',$postlike)->where('user_id',$usId)->delete();
     }

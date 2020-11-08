@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
 
 class PostsController extends Controller
 {
@@ -28,12 +29,7 @@ class PostsController extends Controller
      }
 
   public function showPosts(Request $request){
-     $n=5;
-     $inc=$request->seeMore;
-      if($inc>0){
-        $n+=10;
-      }else{$n=5;}
-
+    
        $posts= DB::table('posts')
        ->leftJoin('users','posts.user_id','=','users.id')
        ->leftJoin('likes','likes.post_id','=','posts.id')
@@ -42,9 +38,25 @@ class PostsController extends Controller
                 )
        ->groupBy('likes.post_id','posts.id')
        ->latest()->simplePaginate(2);
-    
+      
      return view('feed',compact('posts'));
     }
+
+    public function showPost(Request $request){
+    $id=$request->notId;
+    DB::table('notifications')->where('id',$id)
+    ->update(['read_at'=>now()]);
+    $post_id=$request->post_id;
+      $postt= Posts::where('posts.id','=',$post_id)
+      ->leftJoin('users','posts.user_id','=','users.id')
+      ->leftJoin('likes','likes.post_id','=','posts.id')
+      ->select('posts.*','users.id as uid','users.name' 
+               ,DB::raw("count(likes.post_id) as likenb")
+               )
+      ->groupBy('likes.post_id','posts.id')->get();
+    // dd($post);
+    return view('post',compact('postt'));
+   }
 
   public function delPosts(Request $request){
     $imagepath='var/www/bloggApp/storage/app/'.$request->pic;

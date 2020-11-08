@@ -12,7 +12,13 @@
   <div class="flex-shrink-2 flex items-center">
   <h3 class="flex items-center">FriendsHub</h3>
   </div>
-                <!-- Navigation Links -->
+        <div class="flex-shrink-2 flex items-center">
+         <div id="notif" class="dropdownNot"><button class="dropbtn"><i class="fa fa-edit"></i></button></div>
+         @if( auth()->user()->unreadNotifications->count() > 0)
+         <div class="notify">{{ auth()->user()->unreadNotifications->count() }}</div>
+         @endif
+         </div>
+                 <!-- Navigation Links -->
                 {{-- <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
@@ -22,6 +28,7 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
+           
                 <x-jet-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -39,6 +46,7 @@
                                 </div>
                             </button>
                         @endif
+                        
                     </x-slot>
 
                     <x-slot name="content">

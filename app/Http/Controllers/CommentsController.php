@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\comments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\CommentedYourPost;
 
 class CommentsController extends Controller
 {
@@ -16,11 +18,14 @@ class CommentsController extends Controller
     $postId= $json['postId'];
     $text=$json['text'];
     $usId=Auth::id();
+    $usName=Auth::user()->name;
+    $notif=$json['notifId'];
     $data_form=['post_id'=>$postId,
                 'user_id'=>$usId,
                 'cmnt_text'=>$text];
 
                 comments::insert($data_form);
+                User::find($notif)->notify(new CommentedYourPost($postId,$usId,$usName));
                 
    }
 

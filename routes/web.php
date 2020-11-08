@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\CommentsController;
+use App\Http\Controllers\NotificationController;
 
 
 /*
@@ -21,10 +22,12 @@ Route::get('/linkstorage', function () { $targetFolder = base_path().'/storage';
 
 
 Route::get('/',[PostsController::class,'publicshowPosts']);
-
+Route::get('/not',[NotificationController::class,'get_notifications']);
 Route::middleware(['auth:sanctum', 'verified'])
 ->group(function(){
     Route::get('/dashboard',[PostsController::class,'showPosts'])->name('dashboard');
+    Route::post('/post',[PostsController::class,'showPost'])->name('post');
+   // Route::get('/post',[PostsController::class,'showPost'])->name('getpost');
     Route::post('/feeds', [PostsController::class,'showPosts'])->name('seemore');
     Route::get('/feeds', [PostsController::class,'showPosts'])->name('feeds');
     Route::post('/feeds/addPosts', [PostsController::class,'addPosts'])->name('addPost');
@@ -36,4 +39,5 @@ Route::middleware(['auth:sanctum', 'verified'])
     Route::post('/cmntContent', [CommentsController::class,'cmntContent']);
     Route::post('/commentjs', [CommentsController::class,'cmntPosts']);
     Route::post('/countCommentjs', [CommentsController::class,'cmntCount']);
+    Route::post('/notifications',[NotificationController::class,'get_notifications']);
 });

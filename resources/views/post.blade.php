@@ -12,43 +12,11 @@
             news feed
         </title>
     </head>
-
-
     <br>
-    {{-- <div class='container bg-gray-100'>
-        <br>
 
-        @if ($errors->any())
-            <div class='alert alert-danger'>
-                <ul>
-                    @foreach ($errors->any() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif --}}
-         <div class="bg-gray-100 justify-content-center">
-         <div class="border bg-white wid1 justify-content-center">
-        {{-- <div class="align-items-center"> --}}
-            <form method='post' class='' enctype='multipart/form-data' action="{{ url('feeds/addPosts') }}">
-                @csrf
-                <div class="form-group">
-                    {{-- <input class="form-control textareaa" type='textArea' name='blog_text'
-                        placeholder="What's on your mind?" /><br> --}}
-                        <textarea placeholder="What's on your mind?" class="form-control textareaa" name='blog_text'></textarea>
-                    <div class="row">
-                        <div class='col-sm'>
-                            <input class="form-control-file " type='file' name='imgg' />
-                        </div>
-                        <div class='col-sm'>
-                            <input class="btn btn-primary" type='submit' name='sub' value="Post" />
-                        </div>
-                    </div>
-                   
-                </div>
-            </form>
-          </div><br>
-                @foreach ($posts as $post)
+ <div class="bg-gray-100 justify-content-center">
+         <br>
+                @foreach ($postt as $post)
 
                     <div class="border bg-white wid justify-content-center">
                         <div class="row">
@@ -57,8 +25,12 @@
                         </div>
                             <div class='col-sm'>
 
-                               <div> <b class='userName1'>{{ $post->name }}</b><br>
-                                <h6 class='date'>{{ $post->created_at }}</h6></div>
+                               <div> 
+                               
+                               <b class='userName1'>{{ $post->name }}</b><br>
+                                <h6 class='date'>{{ $post->created_at }}</h6>
+                               
+                               </div>
                             </div>
 
                             <div class='col-sm'>
@@ -105,13 +77,11 @@
 
                             <div class='col-md-auto' id='dform{{ $post->id }}'>
                                 @if ($post->uid == Auth::id())
-                                    <button class="btn like cmnt" onclick=mycomment({{ $post->id }},{{ $post->uid }})
-                                        id='c{{ $post->id }}'>{{-- $post->cmntnb
-                                        --}} comments</button>
+                                    <button class="btn like cmnt" onclick=mycomment({{ $post->id }})
+                                        id='c{{ $post->id }}'>comments</button>
 
-                                @else <button class="btn like cmnt" onclick=comment({{ $post->id }},{{ $post->uid }})
-                                        id='c{{ $post->id }}'>{{-- $post->cmntnb
-                                        --}} comments</button>
+                                @else <button class="btn like cmnt" onclick=comment({{ $post->id }})
+                                        id='c{{ $post->id }}'>comments</button>
                                 @endif
                             </div>
                         </div>
@@ -121,20 +91,6 @@
 
 
                 @endforeach
-                {{ $posts->links() }}
-            </div>
-            {{-- <form method='post' action="{{ url('feeds') }}">
-                @csrf
-                <input type='hidden' value="5" name='seeMore' />
-                <button class="btn btn-link" name="comment" id='cmnt'>See More</button>
-            </form> --}}
-
-            <script src="JSS/feedScript.js"></script>
-
-        </div>
-
-        {{--
-        </body>
-
-        </html> --}}
+<script src="JSS/feedScript.js"></script>
+</div>
 </x-app-layout>
